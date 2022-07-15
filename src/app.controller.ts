@@ -11,7 +11,7 @@ import { HttpService } from '@nestjs/axios';
 @Controller()
 export class AppController {
 
-  private message: string[];
+  private messages: string[];
 
   constructor(
     private httpService: HttpService,
@@ -20,12 +20,15 @@ export class AppController {
 
   @Post('/injest')
   injestLog(@Body() body) {
-    Logger.log(body);
-    this.message.push(body);
+    Logger.log("Injested new message");
+    this.messages.push(body);
+    Logger.log("New Message Length:", this.messages.length);
   }
   
   @Get('/consume')
   consumer() {
-    return this.message;
+    Logger.log("Requested consumption");
+    Logger.log("Message Length:", this.messages.length);
+    return this.messages;
   }
 }
