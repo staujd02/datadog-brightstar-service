@@ -12,7 +12,6 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   app.enableCors();
 
-
   const configService: ConfigService = app.get(ConfigService);
   // setupSwagger(app, configService);
 
