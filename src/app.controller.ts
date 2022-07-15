@@ -1,8 +1,8 @@
 import {
   Body,
   Controller,
-  Get,
   Logger,
+  Post,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { HttpService } from '@nestjs/axios';
@@ -14,7 +14,7 @@ export class AppController {
     private readonly appService: AppService,
   ) {}
 
-  @Get('/injest')
+  @Post('/injest')
   getGuardedHello(@Body() body) {
     Logger.log(body);
   }
