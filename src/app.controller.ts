@@ -16,7 +16,9 @@ export class AppController {
   constructor(
     private httpService: HttpService,
     private readonly appService: AppService,
-  ) {}
+  ) {
+    this.messages = [];
+  }
 
   @Post('/injest')
   injestLog(@Body() body) {
