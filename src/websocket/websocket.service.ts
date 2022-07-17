@@ -1,66 +1,45 @@
-import {
-    Logger,
-    OnModuleInit,
-} from '@nestjs/common';
+import { Server as SocketIOServer } from 'socket.io';
+import { createServer, Server as HttpServer } from 'http';
+import { OnModuleInit } from '@nestjs/common';
 import { ServerService } from 'src/server/server.service';
 import { MessageEventType } from './websockets.enums';
-import { 
-    WebSocketGateway, 
-    SubscribeMessage,
-} from '@nestjs/websockets'
 
-@WebSocketGateway(parseInt(process.env.PORT || "8080"))
-export class WebSocketService implements OnModuleInit {
+export class WebSocketServer implements OnModuleInit {
+
+    private server: HttpServer;
+    private wss: SocketIOServer ;
 
     constructor(
-        private readonly server: ServerService
-    ) { }
+        private readonly expressServer: ServerService
+    ) {
+        this.server = createServer();
+        this.wss = new SocketIOServer(this.server);
+    }
+
+    public injectAlertMessage(message: any){
+        this.wss.emit(MessageEventType.Alert, message);
+    }
 
     onModuleInit() {
-
-        let WSServer = require('ws').Server;
-        let server = require('http').createServer();
-        let app = require('./http-server');
-
-        // Create web socket server on top of a regular http server
-        let wss = new WSServer({
-            server: server
-        });
-
-        // Also mount the app here
-        server.on('request', app);
-
-        wss.on('connection', function connection(ws) {
-
+        const app = this.expressServer.server;
+        this.server.on('request', app);
+        this.wss.on('connection', function connection(ws) {
+            console.log(`client connected: ${ws.id}`);
             ws.on('message', function incoming(message) {
-
                 console.log(`received: ${message}`);
-
                 ws.send(JSON.stringify({
-
                     answer: 42
                 }));
             });
+            ws.on('disconnected', function incoming() {
+                console.log(`client disconnected: ${ws.id}`);
+            });
         });
-    }
 
-    // private registerConnectionLogger(server: Server) {
-    //     server.on('connection', (socket) => {
-    //     });
-    // }
-    @SubscribeMessage('connection')
-    public connectionListener(){
-        Logger.log('Client connected');
-    //         socket.on('disconnect', () => Logger.log('Client disconnected'));
-    }
+        const PORT = process.env.PORT || 8080;
 
-    public broadcastMessage(message: any) {
-        // Logger.log("Broadcasting Message");
-        // this.server.write(message);
-    }
-
-    public postEvent(eventName: MessageEventType, message: any) {
-        // Logger.log("Emiting Event: " + eventName);
-        // this.server.emit(eventName, message);
+        this.server.listen(PORT, function() {
+            console.log(`http/ws server listening on ${PORT}`);
+        });
     }
 }

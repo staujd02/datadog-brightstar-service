@@ -13,7 +13,6 @@ import { LoggerModule } from 'nestjs-pino';
 import { AppService } from './app.service';
 import { ConsoleLogger } from './logging/consoleLogger';
 import { ServerModule } from './server/server.module';
-import { ServerService } from './server/server.service';
 import { WebSocketModule } from './websocket/websocket.module';
 
 @Module({
