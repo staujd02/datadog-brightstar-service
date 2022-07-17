@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ServerModule } from "src/server/server.module";
-import { WebSocketServer } from "./websocket.service";
+import { WebSocketServer } from "./websocket.server";
 
 @Module({
   imports: [ServerModule],

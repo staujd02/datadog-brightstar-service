@@ -1,21 +1,21 @@
-import { OnModuleInit } from "@nestjs/common";
 import { ServerService } from "src/server/server.service";
 import bodyParser from 'body-parser';
-import { WebSocketServer } from "src/websocket/websocket.service";
+import { WebSocketServer } from "src/websocket/websocket.server";
 
-export class HttpServer implements OnModuleInit {
+export class HttpServer {
 
     constructor(
         private readonly expressServer: ServerService,
         private readonly webSocketServer: WebSocketServer,
     ) {}
 
-    onModuleInit() {
+    public configure() {
         const app = this.expressServer.server;
         app.use(bodyParser.json());
         app.get('/health', function(req, res) {
             console.log('Health Checked');
-            return res.sendStatus(200);
+            res.sendStatus(200);
+            res.end();
         });
         app.post('/injest', function(req, res) {
             let message = req.body.message;
@@ -23,5 +23,10 @@ export class HttpServer implements OnModuleInit {
             this.webSocketServer.injectAlertMessage(message);
             return res.sendStatus(200);
         });
+    }
+
+    public startListening(){
+        this.configure();
+        this.webSocketServer.listen();
     }
 }

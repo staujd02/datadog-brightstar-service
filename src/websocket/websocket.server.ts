@@ -6,7 +6,7 @@ import { MessageEventType } from './websockets.enums';
 
 export class WebSocketServer implements OnModuleInit {
 
-    private server: HttpServer;
+    public server: HttpServer;
     private wss: SocketIOServer ;
 
     constructor(
@@ -18,6 +18,13 @@ export class WebSocketServer implements OnModuleInit {
 
     public injectAlertMessage(message: any){
         this.wss.emit(MessageEventType.Alert, message);
+    }
+
+    public listen(){
+        const PORT = process.env.PORT || 8080;
+        this.server.listen(PORT, function() {
+            console.log(`http/ws server listening on ${PORT}`);
+        });
     }
 
     onModuleInit() {
@@ -34,12 +41,6 @@ export class WebSocketServer implements OnModuleInit {
             ws.on('disconnected', function incoming() {
                 console.log(`client disconnected: ${ws.id}`);
             });
-        });
-
-        const PORT = process.env.PORT || 8080;
-
-        this.server.listen(PORT, function() {
-            console.log(`http/ws server listening on ${PORT}`);
         });
     }
 }

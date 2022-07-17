@@ -9,5 +9,5 @@ export class ServerService {
 
     constructor() {
         this.server = express();
-     }
+    }
 }

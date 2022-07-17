@@ -1,5 +1,5 @@
 import { ResponseTimeMiddleware } from '@nest-middlewares/response-time';
-import { HttpModule } from '@nestjs/axios';
+import { HttpServerModule } from './httpServer/http.server.module';
 import {
   MiddlewareConsumer,
   Module,
@@ -21,12 +21,13 @@ import { WebSocketModule } from './websocket/websocket.module';
     configureHealthCheck(),
     configurePinoLogging(),
     configureMetrics(),
-    HttpModule,
+    HttpServerModule,
     WebSocketModule,
-    ServerModule
+    ServerModule,
   ],
   providers: [
     AppService,
+    HttpServerModule,
     {
       provide: 'LOGGING_METHOD',
       useClass: ConsoleLogger,
