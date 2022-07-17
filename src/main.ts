@@ -13,12 +13,8 @@ async function bootstrap() {
   app.enableCors();
 
   const configService: ConfigService = app.get(ConfigService);
-  // setupSwagger(app, configService);
 
-  // Add this back
-  // const port = configService.get<number>(Constants.PortKey);
-
-  await app.listen(process.env.PORT || 8080);
+  // await app.listen(process.env.PORT || 8080);
 }
 
 bootstrap();

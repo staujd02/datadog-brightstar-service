@@ -10,9 +10,11 @@ import { ConfigModule } from '@nestjs/config';
 import { TerminusModule } from '@nestjs/terminus';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConsoleLogger } from './logging/consoleLogger';
+import { ServerModule } from './server/server.module';
+import { ServerService } from './server/server.service';
+import { WebSocketModule } from './websocket/websocket.module';
 
 @Module({
   imports: [
@@ -20,9 +22,10 @@ import { ConsoleLogger } from './logging/consoleLogger';
     configureHealthCheck(),
     configurePinoLogging(),
     configureMetrics(),
-    HttpModule
+    HttpModule,
+    WebSocketModule,
+    ServerModule
   ],
-  controllers: [AppController],
   providers: [
     AppService,
     {
