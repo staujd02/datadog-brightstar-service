@@ -1,7 +1,10 @@
 import { ServerService } from "src/server/server.service";
-import bodyParser from 'body-parser';
+import * as bodyParser from 'body-parser';
 import { WebSocketServer } from "src/websocket/websocket.server";
+import { Injectable } from "@nestjs/common";
+import e from "express";
 
+@Injectable()
 export class HttpServer {
 
     constructor(
@@ -9,8 +12,7 @@ export class HttpServer {
         private readonly webSocketServer: WebSocketServer,
     ) {}
 
-    public configure() {
-        const app = this.expressServer.server;
+    public configure(app: e.Express) {
         app.use(bodyParser.json());
         app.get('/health', function(req, res) {
             console.log('Health Checked');
@@ -26,7 +28,8 @@ export class HttpServer {
     }
 
     public startListening(){
-        this.configure();
+        // const app = this.expressServer.server;
+        // this.configure(app);
         this.webSocketServer.listen();
     }
 }

@@ -1,10 +1,9 @@
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { HttpServer } from './http.server';
+import { Injectable } from '@nestjs/common';
 
-// let WSServer = require('ws').Server;
-// let app = require('./http-server');
-
+@Injectable()
 export class WebSocketServer {
 
     constructor() {

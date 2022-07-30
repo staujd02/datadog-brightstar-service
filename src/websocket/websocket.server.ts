@@ -1,9 +1,10 @@
 import { Server as SocketIOServer } from 'socket.io';
 import { createServer, Server as HttpServer } from 'http';
-import { OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ServerService } from 'src/server/server.service';
 import { MessageEventType } from './websockets.enums';
 
+@Injectable()
 export class WebSocketServer implements OnModuleInit {
 
     public server: HttpServer;
@@ -29,7 +30,7 @@ export class WebSocketServer implements OnModuleInit {
 
     onModuleInit() {
         const app = this.expressServer.server;
-        this.server.on('request', app);
+        // this.server.on('request', app);
         this.wss.on('connection', function connection(ws) {
             console.log(`client connected: ${ws.id}`);
             ws.on('message', function incoming(message) {
