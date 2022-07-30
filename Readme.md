@@ -1,5 +1,7 @@
 ## Brightstar Service
 
+Server that will injest message from a Datadog webhook and echo those messages to a web socket client.
+
 ## Test The Emitting
 
 1. Install deps `yarn install`
