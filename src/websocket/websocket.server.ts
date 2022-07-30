@@ -1,47 +1,27 @@
-import { Server as SocketIOServer } from 'socket.io';
-import { createServer, Server as HttpServer } from 'http';
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ServerService } from 'src/server/server.service';
-import { MessageEventType } from './websockets.enums';
+import { Server, Socket } from 'socket.io';
+import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { Logger } from '@nestjs/common';
 
-@Injectable()
-export class WebSocketServer implements OnModuleInit {
+@WebSocketGateway()
+export class LogSocketServer {
+    
+    @WebSocketServer()
+    public server: Server;
 
-    public server: HttpServer;
-    private wss: SocketIOServer ;
-
-    constructor(
-        private readonly expressServer: ServerService
-    ) {
-        this.server = createServer();
-        this.wss = new SocketIOServer(this.server);
+    @SubscribeMessage('connection')
+    handleConnectedEvent(
+        @MessageBody() data: string,
+        @ConnectedSocket() client: Socket,
+    ): void {
+        console.log("client connected");
     }
 
-    public injectAlertMessage(message: any){
-        this.wss.emit(MessageEventType.Alert, message);
-    }
-
-    public listen(){
-        const PORT = process.env.PORT || 8080;
-        this.server.listen(PORT, function() {
-            console.log(`http/ws server listening on ${PORT}`);
-        });
-    }
-
-    onModuleInit() {
-        const app = this.expressServer.server;
-        // this.server.on('request', app);
-        this.wss.on('connection', function connection(ws) {
-            console.log(`client connected: ${ws.id}`);
-            ws.on('message', function incoming(message) {
-                console.log(`received: ${message}`);
-                ws.send(JSON.stringify({
-                    answer: 42
-                }));
-            });
-            ws.on('disconnected', function incoming() {
-                console.log(`client disconnected: ${ws.id}`);
-            });
-        });
+    @SubscribeMessage('message')
+    handleEvent(
+        @MessageBody() data: string,
+        @ConnectedSocket() client: Socket,
+    ): string {
+        console.log("echoing data: ", data);
+        return Buffer.from(data).toString("utf-8");
     }
 }
