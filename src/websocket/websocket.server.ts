@@ -6,7 +6,11 @@ import { Logger } from '@nestjs/common';
 export class LogSocketServer {
     
     @WebSocketServer()
-    public server: Server;
+    private server: Server;
+
+    public emitToAllClients(message: any){
+        this.server.emit("log", message);
+    }
 
     @SubscribeMessage('connection')
     handleConnectedEvent(

@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TerminusModule } from '@nestjs/terminus';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
+import { EmitterModule } from './emitter/emitter.module';
 import { HttpInjestorController } from './httpServer/httpInjestor.server';
 import { HttpInjestorModule } from './httpServer/httpServer.module';
 import { ConsoleLogger } from './logging/consoleLogger';
@@ -20,6 +21,7 @@ import { WebSocketModule } from './websocket/websocket.module';
     configureHealthCheck(),
     configurePinoLogging(),
     configureMetrics(),
+    EmitterModule,
     HttpInjestorModule,
     WebSocketModule,
   ],
