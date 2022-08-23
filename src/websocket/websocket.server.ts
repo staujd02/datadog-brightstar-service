@@ -2,6 +2,7 @@ import { Server, Socket } from 'socket.io';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer, WsException } from '@nestjs/websockets';
 import { ConfigService } from '@nestjs/config';
 import { Constants } from 'src/constants';
+import { Logger } from '@nestjs/common';
 
 @WebSocketGateway()
 export class LogSocketServer implements OnGatewayConnection {
@@ -15,8 +16,10 @@ export class LogSocketServer implements OnGatewayConnection {
 
     public handleConnection(client: Socket) {
         const value = this.validateRequest(client.handshake.headers.authorization);
-        if(!value)
-            throw new WsException("Unauthorized");
+        if(!value){
+            client.disconnect(true);
+            Logger.warn("Rejected unwelcome guest.");
+        }
     }
   
     private validateRequest(authHeader: string): boolean {

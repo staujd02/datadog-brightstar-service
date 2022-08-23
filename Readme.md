@@ -18,6 +18,10 @@ Server that will injest message from a Datadog webhook and echo those messages t
 6. Create a standard `POST` request and post a message to `localhost:8080/injest` with a JSON body
 7. Confirm in the running socket window that the POST message was emitted back to you
 
+# Auth Header
+- Set .env AUTH_TOKEN to a random cyptographic string
+- Ensure `authorization` is set as
+
 
 # Sending messages back to server
 
