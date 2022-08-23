@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
-import { Emitter } from 'src/emitter/emitter.service';
+import { AlertUpdate, Emitter } from 'src/emitter/emitter.service';
 
 @Controller("injest")
 export class HttpInjestorController {
@@ -10,9 +10,9 @@ export class HttpInjestorController {
     
     @Post()
     handleInjest(
-        @Body() data: string,
+        @Body() data: AlertUpdate,
     ): void {
         Logger.log("Emitting Message to All Clients");
-        this.emitter.emit(JSON.parse(data));
+        this.emitter.emit(data);
     }
 }
