@@ -1,5 +1,4 @@
 import { ResponseTimeMiddleware } from '@nest-middlewares/response-time';
-import { HttpModule } from '@nestjs/axios';
 import {
   MiddlewareConsumer,
   Module,
@@ -10,9 +9,11 @@ import { ConfigModule } from '@nestjs/config';
 import { TerminusModule } from '@nestjs/terminus';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { EmitterModule } from './emitter/emitter.module';
+import { HttpInjestorController } from './httpServer/httpInjestor.server';
+import { HttpInjestorModule } from './httpServer/httpServer.module';
 import { ConsoleLogger } from './logging/consoleLogger';
+import { WebSocketModule } from './websocket/websocket.module';
 
 @Module({
   imports: [
@@ -20,11 +21,12 @@ import { ConsoleLogger } from './logging/consoleLogger';
     configureHealthCheck(),
     configurePinoLogging(),
     configureMetrics(),
-    HttpModule
+    EmitterModule,
+    HttpInjestorModule,
+    WebSocketModule,
   ],
-  controllers: [AppController],
+  controllers: [HttpInjestorController],
   providers: [
-    AppService,
     {
       provide: 'LOGGING_METHOD',
       useClass: ConsoleLogger,
