@@ -1,15 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { LightParser } from 'src/parsers/lightParser';
 import { LogSocketServer } from 'src/websocket/websocket.server';
+
+export interface AlertUpdate {
+    title: string,
+    alert_type: string,
+    transition: string,
+    priority: string,
+    last_updated: string,
+    event_title: string,
+    date: string,
+    id: string,
+}
 
 @Injectable()
 export class Emitter {
 
     constructor(
-        private readonly webSockerServer: LogSocketServer
+        private readonly webSockerServer: LogSocketServer,
+        private readonly lightParser: LightParser,
     ){}
 
-    public emit(message: any): void{
-        this.webSockerServer.emitToAllClients(message);
+    public emit(message: AlertUpdate): void{
+        this.webSockerServer.emitLog(message);
+        this.webSockerServer.emitLightStatusToAllClients(
+            this.lightParser.parseMessage(message)
+        );
     }
     
 }

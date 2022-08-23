@@ -17,3 +17,17 @@ Server that will injest message from a Datadog webhook and echo those messages t
     2. Add `log` to the event listeners list
 6. Create a standard `POST` request and post a message to `localhost:8080/injest` with a JSON body
 7. Confirm in the running socket window that the POST message was emitted back to you
+
+
+# Sending messages back to server
+
+```
+    // @SubscribeMessage('message')
+    // handleEvent(
+    //     @MessageBody() data: string,
+    //     @ConnectedSocket() client: Socket,
+    // ): string {
+    //     console.log("echoing data: ", data);
+    //     return Buffer.from(data).toString("utf-8");
+    // }
+```

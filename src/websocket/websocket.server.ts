@@ -8,8 +8,13 @@ export class LogSocketServer {
     @WebSocketServer()
     private server: Server;
 
-    public emitToAllClients(message: any){
+    public emitLog(message: any){
         this.server.emit("log", message);
+    }
+    
+    public emitLightStatusToAllClients(message: string){
+        // "255,255,255 MODE TIMEOUT";
+        this.server.emit("light", message);
     }
 
     @SubscribeMessage('connection')
@@ -18,14 +23,5 @@ export class LogSocketServer {
         @ConnectedSocket() client: Socket,
     ): void {
         console.log("client connected");
-    }
-
-    @SubscribeMessage('message')
-    handleEvent(
-        @MessageBody() data: string,
-        @ConnectedSocket() client: Socket,
-    ): string {
-        console.log("echoing data: ", data);
-        return Buffer.from(data).toString("utf-8");
     }
 }
