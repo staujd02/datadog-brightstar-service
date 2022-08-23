@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
-import { ParserModule } from "src/parsers/emitter.module";
-import { LightParser } from "src/parsers/lightParser";
-import { WebSocketModule } from "src/websocket/websocket.module";
+import { ParserModule } from "../parsers/emitter.module";
+import { WebSocketModule } from "../websocket/websocket.module";
 import { Emitter } from "./emitter.service";
 
 @Module({

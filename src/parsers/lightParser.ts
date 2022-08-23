@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AlertUpdate } from 'src/emitter/emitter.service';
-import { LogSocketServer } from 'src/websocket/websocket.server';
+import { AlertUpdate } from '../emitter/emitter.service';
 
 @Injectable()
 export class LightParser {

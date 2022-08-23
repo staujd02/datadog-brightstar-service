@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
-import { AlertUpdate, Emitter } from 'src/emitter/emitter.service';
+import { AlertUpdate, Emitter } from '../emitter/emitter.service';
 
 @Controller("injest")
 export class HttpInjestorController {

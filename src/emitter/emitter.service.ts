@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { LightParser } from 'src/parsers/lightParser';
-import { LogSocketServer } from 'src/websocket/websocket.server';
+import { LightParser } from '../parsers/lightParser';
+import { LogSocketServer } from '../websocket/websocket.server';
 
 export interface AlertUpdate {
     title: string,

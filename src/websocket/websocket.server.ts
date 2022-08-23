@@ -1,23 +1,37 @@
 import { Server, Socket } from 'socket.io';
-import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Logger } from '@nestjs/common';
+import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer, WsException } from '@nestjs/websockets';
+import { ConfigService } from '@nestjs/config';
+import { Constants } from 'src/constants';
 
 @WebSocketGateway()
-export class LogSocketServer {
+export class LogSocketServer implements OnGatewayConnection {
+    
+    constructor(
+        private readonly config: ConfigService
+    ) {}
     
     @WebSocketServer()
     private server: Server;
+
+    public handleConnection(client: Socket) {
+        const value = this.validateRequest(client.handshake.headers.authorization);
+        if(!value)
+            throw new WsException("Unauthorized");
+    }
+  
+    private validateRequest(authHeader: string): boolean {
+        return this.config.get(Constants.AuthToken) === authHeader;
+    }
 
     public emitLog(message: any){
         this.server.emit("log", message);
     }
     
     public emitLightStatusToAllClients(message: string){
-        // "255,255,255 MODE TIMEOUT";
         this.server.emit("light", message);
     }
 
-    @SubscribeMessage('connection')
+    @SubscribeMessage("connection")
     handleConnectedEvent(
         @MessageBody() data: string,
         @ConnectedSocket() client: Socket,
