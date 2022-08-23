@@ -13,6 +13,7 @@ import { EmitterModule } from './emitter/emitter.module';
 import { HttpInjestorController } from './httpServer/httpInjestor.server';
 import { HttpInjestorModule } from './httpServer/httpServer.module';
 import { ConsoleLogger } from './logging/consoleLogger';
+import { LightParser } from './parsers/lightParser';
 import { WebSocketModule } from './websocket/websocket.module';
 
 @Module({
@@ -24,6 +25,7 @@ import { WebSocketModule } from './websocket/websocket.module';
     EmitterModule,
     HttpInjestorModule,
     WebSocketModule,
+    LightParser,
   ],
   controllers: [HttpInjestorController],
   providers: [

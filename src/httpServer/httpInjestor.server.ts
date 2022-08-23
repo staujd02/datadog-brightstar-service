@@ -8,16 +8,11 @@ export class HttpInjestorController {
         private readonly emitter: Emitter
     ){}
     
-    @Get()
-    handleGet(): string {
-        return "You got me!";
-    }
-    
     @Post()
     handleInjest(
         @Body() data: string,
     ): void {
         Logger.log("Emitting Message to All Clients");
-        this.emitter.emit(data);
+        this.emitter.emit(JSON.parse(data));
     }
 }
